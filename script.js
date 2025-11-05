@@ -41,7 +41,12 @@ function switchScreen(screenId) {
             b.classList.add('is-active')
         }
     }
-
+    for(s of Sections){
+         s.classList.remove('is-visible');
+        if(s.getAttribute("data-screen") === screenId.getAttribute('data-screen')){
+            s.classList.add('is-visible')
+        }
+    }
 
 
 
