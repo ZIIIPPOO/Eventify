@@ -2,8 +2,49 @@
 // ============================================
 
 // Your app's data structure
-let events = [];
+// At the top of script.js
+    const prices = [1, 1, 1, 1, 1];
+    const total = Math.max(prices)
+
+    console.log(total);
+
+
 let archive = [];
+
+let events = [
+    {
+        id: 1,
+        title: "Summer Music Festival",
+        image: "https://via.placeholder.com/400x300",
+        description: "Join us for an amazing summer music festival",
+        seats: 100,
+        price: 49.99,
+        variants: [
+            { id: 1, name: "Early Bird", qty: 20, value: 39.99, type: "fixed" },
+            { id: 2, name: "Student", qty: 30, value: 20, type: "percentage" }
+        ]
+    },
+    {
+        id: 2,
+        title: "Tech Conference 2024",
+        image: "https://via.placeholder.com/400x300",
+        description: "Annual technology conference with industry leaders",
+        seats: 200,
+        price: 299.99,
+        variants: [
+            { id: 1, name: "VIP", qty: 50, value: 399.99, type: "fixed" }
+        ]
+    },
+    {
+        id: 3,
+        title: "Art Exhibition",
+        image: "https://via.placeholder.com/400x300",
+        description: "Contemporary art exhibition featuring local artists",
+        seats: 50,
+        price: 25.00,
+        variants: []
+    }
+];
 
 // Save/load from localStorage
 function loadData() {
@@ -29,45 +70,53 @@ function saveData() {
     // for(b of bouttons){
     //     if(screenId === )
     // }
+
     
-
-function switchScreen(screenId) {
-
+    function switchScreen(screenId) {
+        
     const bouttons= document.querySelectorAll('.sidebar__btn');
     const Sections =document.querySelectorAll('.screen');
-   for(b of bouttons){
+    for(b of bouttons){
         b.classList.remove('is-active');
         if(b.getAttribute("data-screen") === screenId.getAttribute('data-screen')){
             b.classList.add('is-active')
         }
     }
     for(s of Sections){
-         s.classList.remove('is-visible');
+        s.classList.remove('is-visible');
         if(s.getAttribute("data-screen") === screenId.getAttribute('data-screen')){
             s.classList.add('is-visible')
         }
     }
-
-
-
+    
+    
+    
+    const title = document.getElementById('page-title');
+    const subtitle = document.getElementById('page-subtitle');
+    switch(screenId.getAttribute('data-screen')) {
+        case 'stats':
+            title.innerHTML = 'Statistics';
+            subtitle.innerHTML = 'Overview of your events';
+            break;
+        case 'add':
+            title.innerHTML = 'Add Event';
+            subtitle.innerHTML = 'Create a new event';
+            break;
+        case 'list':
+            title.innerHTML = 'Events';
+            subtitle.innerHTML = 'Manage your events';
+            break;
+        case 'archive':
+            title.innerHTML = 'Archive';
+            subtitle.innerHTML = 'Archived events';
+            break;
+    }
     // TODO:
     // 1. Remove .is-active from all .sidebar__btn
     // 2. Add .is-active to [data-screen="${screenId}"]
     // 3. Remove .is-visible from all .screen
     // 4. Add .is-visible to [data-screen="${screenId}"]
     // 5. Update #page-title and #page-subtitle based on screenId
-    // document.querySelectorAll('.sidebar__btn').forEach(btn => {
-    // btn.classList.remove('is-active');
-    // const s= document.querySelectorAll('.sidebar__btn');
-    
-    // console.log(s)
-    // console.log(s)
-    // for (let index = 0; index < 4; index++) {
-    //     if(s === screenId)
-    //     {
-    //         document.getElementById()
-    //     }  
-    // }
 
 
 
@@ -94,6 +143,7 @@ function renderStats() {
     document.getElementById('stat-total-seats').textContent = totalSeats;
     document.getElementById('stat-total-price').textContent = '$' + totalPrice.toFixed(2);
 }
+renderStats();
 
 // ============================================
 // ADD EVENT FORM
