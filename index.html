@@ -18,22 +18,22 @@
 
             <nav class="sidebar__nav">
                 <!-- Screen buttons (students will add JS to handle click + switch screens) -->
-                <button class="sidebar__btn is-active" data-screen="stats">
+                <button id="btt" class="sidebar__btn is-active" data-screen="stats" onclick="switchScreen(this)">
                     <span class="sidebar__icon">📊</span>
                     <span class="sidebar__label">Statistics</span>
                 </button>
 
-                <button class="sidebar__btn" data-screen="add">
+                <button class="sidebar__btn" data-screen="add" onclick="switchScreen(this)">
                     <span class="sidebar__icon">➕</span>
-                    <span class="sidebar__label" onclick="affichage()">Add Event</span>
+                    <span  class="sidebar__label">Add Event</span>
                 </button>
 
-                <button class="sidebar__btn" data-screen="list">
+                <button class="sidebar__btn" data-screen="list" onclick="switchScreen(this)">
                     <span class="sidebar__icon">📋</span>
                     <span class="sidebar__label">Events</span>
                 </button>
 
-                <button class="sidebar__btn" data-screen="archive">
+                <button class="sidebar__btn" data-screen="archive" onclick="switchScreen(this)">
                     <span class="sidebar__icon">🗄️</span>
                     <span class="sidebar__label">Archive</span>
                 </button>
@@ -58,7 +58,7 @@
             <div class="screens">
                 
                 <!-- SCREEN 1: Statistics (DEFAULT) -->
-                <section class="screen is-visible" data-screen="stats">
+                <section id="s1" class="screen is-visible" data-screen="stats">
                     <div class="screen__content">
                         <!-- STAT CARDS (JS will update values) -->
                         <div class="stats-grid">
@@ -86,7 +86,7 @@
                 </section>
 
                 <!-- SCREEN 2: Add Event -->
-                <section class="screen" data-screen="add">
+                <section id="s2" class="screen" data-screen="add">
                     <div class="screen__content">
                         <form class="form" id="event-form">
                             <!-- Error messages area -->
@@ -157,7 +157,7 @@
                             <fieldset class="variants">
                                 <legend class="variants__title">
                                     Pricing Variants (Optional)
-                                    <button type="button" class="btn btn--small" id="btn-add-variant">+ Add Variant</button>
+                                    <button onclick="addVariantRow()" type="button" class="btn btn--small" id="btn-add-variant">+ Add Variant</button>
                                 </legend>
                                 
                                 <!-- Variant rows will be appended here by JS -->

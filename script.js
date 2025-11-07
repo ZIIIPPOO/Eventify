@@ -61,36 +61,36 @@ function saveData() {
 
 
 
-    // const atr= document.querySelectorAll('.sidebar__btn')[1].getAttribute("data-screen");
+// const atr= document.querySelectorAll('.sidebar__btn')[1].getAttribute("data-screen");
 
-    // console.log(atr);
-    // for(b of bouttons){
-    //     if(screenId === )
-    // }
+// console.log(atr);
+// for(b of bouttons){
+//     if(screenId === )
+// }
 
-    
-    function switchScreen(screenId) {
-        
-    const bouttons= document.querySelectorAll('.sidebar__btn');
-    const Sections =document.querySelectorAll('.screen');
-    for(b of bouttons){
+
+function switchScreen(screenId) {
+
+    const bouttons = document.querySelectorAll('.sidebar__btn');
+    const Sections = document.querySelectorAll('.screen');
+    for (b of bouttons) {
         b.classList.remove('is-active');
-        if(b.getAttribute("data-screen") === screenId.getAttribute('data-screen')){
+        if (b.getAttribute("data-screen") === screenId.getAttribute('data-screen')) {
             b.classList.add('is-active')
         }
     }
-    for(s of Sections){
+    for (s of Sections) {
         s.classList.remove('is-visible');
-        if(s.getAttribute("data-screen") === screenId.getAttribute('data-screen')){
+        if (s.getAttribute("data-screen") === screenId.getAttribute('data-screen')) {
             s.classList.add('is-visible')
         }
     }
-    
-    
-    
+
+
+
     const title = document.getElementById('page-title');
     const subtitle = document.getElementById('page-subtitle');
-    switch(screenId.getAttribute('data-screen')) {
+    switch (screenId.getAttribute('data-screen')) {
         case 'stats':
             title.innerHTML = 'Statistics';
             subtitle.innerHTML = 'Overview of your events';
@@ -134,7 +134,7 @@ function renderStats() {
     const totalEvents = events.length;
     const totalSeats = events.reduce((sum, e) => sum + e.seats, 0);
     const totalPrice = events.reduce((sum, e) => sum + e.price * e.seats, 0);
-    
+
     // Update DOM:
     document.getElementById('stat-total-events').textContent = totalEvents;
     document.getElementById('stat-total-seats').textContent = totalSeats;
@@ -146,7 +146,7 @@ renderStats();
 // ============================================
 const t_regex = /^[a-zA-Z\s]+$/
 const img_regex = /^https?:\/\/.*\.(png|jpg|jpeg|gif|bmp|webp|svg)$/
-const des_regex = /^[A-Za-z0-9 .,!?'"()\-]{10,300}$/ 
+const des_regex = /^[A-Za-z0-9 .,!?'"()\-]{10,300}$/
 let id = 0;
 function handleFormSubmit(e) {
     e.preventDefault();
@@ -156,28 +156,23 @@ function handleFormSubmit(e) {
     let seats = document.getElementById('event-seats').value.trim();
     let price = document.getElementById('event-price').value.trim();
 
-    if(!t_regex.test(tiitle))
-    {
+    if (!t_regex.test(tiitle)) {
         alert("Please enter a title that contains only alphabetic characters");
         return;
     }
-    if(!img_regex.test(url))
-    {
+    if (!img_regex.test(url)) {
         alert("Please enter a valid url");
         return;
     }
-    if(!des_regex.test(descr))
-    {
+    if (!des_regex.test(descr)) {
         alert("Please enter a valid event description");
         return;
     }
-    if(!seats || parseInt(seats) < 1)
-    {
+    if (!seats || parseInt(seats) < 1) {
         alert("Number of seats must be at least 1");
         return;
     }
-    if(!price || parseInt(price) < 0)
-    {
+    if (!price || parseInt(price) < 0) {
         alert("Price must be a positive number");
         return;
     }
@@ -185,7 +180,7 @@ function handleFormSubmit(e) {
     const newEvent = {
         id: id,
         title: tiitle,
-        image: url ,
+        image: url,
         description: descr,
         seats: parseInt(seats),
         price: parseFloat(price),
@@ -204,6 +199,21 @@ function handleFormSubmit(e) {
 // document.getElementById('event-form').addEventListener('submit', handleFormSubmit)
 
 function addVariantRow() {
+    const varlist = document.getElementById('variants-list')
+
+    const var_row = document.createElement('div');
+    var_row.className = 'variant-row'
+    var_row.innerHTML = `
+        <input type="text" class="input variant-row__name" placeholder="Variant name (e.g., 'Early Bird')" value="">
+    <input type="number" class="input variant-row__qty" placeholder="Qty" min="1" value="">
+    <input type="number" class="input variant-row__value" placeholder="Value" step="0.01" value="">
+    <select class="select variant-row__type">
+        <option value="fixed" selected>Fixed Price</option>
+        <option value="percentage">Percentage Off</option>
+    </select>
+    <button type="button" onclick="removeVariantRow(this)" class="btn btn--danger btn--small variant-row__remove">Remove</button>
+    `
+    varlist.appendChild(var_row);
     // TODO:
     // 1. Clone .variant-row template
     // 2. Append to #variants-list
@@ -211,8 +221,8 @@ function addVariantRow() {
 }
 
 // document.getElementById('btn-add-variant').addEventListener('click', addVariantRow)
-
 function removeVariantRow(button) {
+    button.closest('.variant-row').remove();
     // TODO:
     // Find closest .variant-row and remove it
 }
@@ -222,6 +232,7 @@ function removeVariantRow(button) {
 // ============================================
 
 function renderEventsTable(eventList, page = 1, perPage = 10) {
+
     // TODO:
     // 1. Paginate eventList by page and perPage
     // 2. Generate table rows for each event
