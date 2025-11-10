@@ -147,7 +147,7 @@ renderStats();
 const t_regex = /^[a-zA-Z\s]+$/
 const img_regex = /^https?:\/\/.*\.(png|jpg|jpeg|gif|bmp|webp|svg)$/
 const des_regex = /^[A-Za-z0-9 .,!?'"()\-]{10,300}$/
-let id = 0;
+let id = 3;
 function handleFormSubmit(e) {
     e.preventDefault();
     let tiitle = document.getElementById('event-title').value.trim();
@@ -185,8 +185,10 @@ function handleFormSubmit(e) {
         seats: parseInt(seats),
         price: parseFloat(price),
     };
+    
     events.push(newEvent);
     renderStats();
+    showevents();
     alert('Event created successfully!');
     document.getElementById('event-form').reset();
     // TODO:
@@ -197,7 +199,6 @@ function handleFormSubmit(e) {
 }
 
 // document.getElementById('event-form').addEventListener('submit', handleFormSubmit)
-
 function addVariantRow() {
     const varlist = document.getElementById('variants-list')
 
@@ -231,6 +232,27 @@ function removeVariantRow(button) {
 // EVENTS LIST SCREEN
 // ============================================
 
+function showevents(){
+    const body = document.querySelector('.table__body');
+    body.innerHTML = ''
+    
+    for (let index = 0; index < events.length; index++) {
+        body.innerHTML += `                                
+        <tr class="table__row" data-event-id="${events[index].id}">
+            <td>${events[index].id}</td>
+            <td>${events[index].title}</td>
+            <td>${events[index].seats}</td>
+            <td>$${events[index].price}</td>
+            <td><span class="badge">${events[index].variants.length}</span></td>
+            <td>
+                <button class="btn btn--small" data-action="details" data-event-id="${events[index].id}">Details</button>
+                <button class="btn btn--small" data-action="edit" data-event-id="${events[index].id}">Edit</button>
+                <button class="btn btn--danger btn--small" data-action="archive" data-event-id="${events[index].id}">Delete</button>
+            </td>
+        </tr>`;
+    }
+}
+showevents();
 function renderEventsTable(eventList, page = 1, perPage = 10) {
 
     // TODO:
