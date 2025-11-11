@@ -12,7 +12,7 @@ let events = [
     {
         id: 1,
         title: "Summer Music Festival",
-        image: "https://via.placeholder.com/400x300",
+        image: "https://media.timeout.com/images/106204051/image.jpg",
         description: "Join us for an amazing summer music festival",
         seats: 100,
         price: 49.99,
@@ -23,8 +23,8 @@ let events = [
     },
     {
         id: 2,
-        title: "Tech Conference 2024",
-        image: "https://via.placeholder.com/400x300",
+        title: "Tech Conference 2026",
+        image: "https://women-in-tech.org/wp-content/uploads/2024/06/womenintech-global-summit-2024.jpg",
         description: "Annual technology conference with industry leaders",
         seats: 200,
         price: 299.99,
@@ -35,7 +35,7 @@ let events = [
     {
         id: 3,
         title: "Art Exhibition",
-        image: "https://via.placeholder.com/400x300",
+        image: "https://bykerwin.com/wp-content/uploads/2024/10/IMG_9839-Large-crypt-main-wall-landscape-wordpress-1024x768.jpeg",
         description: "Contemporary art exhibition featuring local artists",
         seats: 50,
         price: 25.00,
@@ -148,6 +148,27 @@ const t_regex = /^[a-zA-Z\s]+$/
 const img_regex = /^https?:\/\/.*\.(png|jpg|jpeg|gif|bmp|webp|svg)$/
 const des_regex = /^[A-Za-z0-9 .,!?'"()\-]{10,300}$/
 let id = 3;
+function addVariantRow() {
+    const varlist = document.getElementById('variants-list')
+
+    const var_row = document.createElement('div');
+    var_row.className = 'variant-row'
+    var_row.innerHTML = `
+        <input type="text" class="input variant-row__name" placeholder="Variant name (e.g., 'Early Bird')" value="">
+    <input type="number" class="input variant-row__qty" placeholder="Qty" min="1" value="">
+    <input type="number" class="input variant-row__value" placeholder="Value" step="0.01" value="">
+    <select class="select variant-row__type">
+        <option value="fixed" selected>Fixed Price</option>
+        <option value="percentage">Percentage Off</option>
+    </select>
+    <button type="button" onclick="removeVariantRow(this)" class="btn btn--danger btn--small variant-row__remove">Remove</button>
+    `
+    varlist.appendChild(var_row);
+    // TODO:
+    // 1. Clone .variant-row template
+    // 2. Append to #variants-list
+    // 3. Add remove listener to new row's remove button
+}
 function handleFormSubmit(e) {
     e.preventDefault();
     let tiitle = document.getElementById('event-title').value.trim();
@@ -184,13 +205,19 @@ function handleFormSubmit(e) {
         description: descr,
         seats: parseInt(seats),
         price: parseFloat(price),
+        variants: [],
     };
     
     events.push(newEvent);
+    const variantrows = document.querySelectorAll('.variant-row');
+    for (let index = 0; index < variantrows.length; index++) {
+        newEvent.variants.push(variantrows);
+    }
     renderStats();
     showevents();
     alert('Event created successfully!');
     document.getElementById('event-form').reset();
+    document.getElementById('variants-list').innerHTML = '';
     // TODO:
     // 1. Prevent default
     // 2. Validate form inputs
@@ -199,27 +226,6 @@ function handleFormSubmit(e) {
 }
 
 // document.getElementById('event-form').addEventListener('submit', handleFormSubmit)
-function addVariantRow() {
-    const varlist = document.getElementById('variants-list')
-
-    const var_row = document.createElement('div');
-    var_row.className = 'variant-row'
-    var_row.innerHTML = `
-        <input type="text" class="input variant-row__name" placeholder="Variant name (e.g., 'Early Bird')" value="">
-    <input type="number" class="input variant-row__qty" placeholder="Qty" min="1" value="">
-    <input type="number" class="input variant-row__value" placeholder="Value" step="0.01" value="">
-    <select class="select variant-row__type">
-        <option value="fixed" selected>Fixed Price</option>
-        <option value="percentage">Percentage Off</option>
-    </select>
-    <button type="button" onclick="removeVariantRow(this)" class="btn btn--danger btn--small variant-row__remove">Remove</button>
-    `
-    varlist.appendChild(var_row);
-    // TODO:
-    // 1. Clone .variant-row template
-    // 2. Append to #variants-list
-    // 3. Add remove listener to new row's remove button
-}
 
 // document.getElementById('btn-add-variant').addEventListener('click', addVariantRow)
 function removeVariantRow(button) {
@@ -245,9 +251,9 @@ function showevents(){
             <td>$${events[index].price}</td>
             <td><span class="badge">${events[index].variants.length}</span></td>
             <td>
-                <button class="btn btn--small" data-action="details" data-event-id="${events[index].id}">Details</button>
+                <button onclick="showEventDetails(this)" class="btn btn--small" data-action="details" data-event-id="${events[index].id}">Details</button>
                 <button class="btn btn--small" data-action="edit" data-event-id="${events[index].id}">Edit</button>
-                <button class="btn btn--danger btn--small" data-action="archive" data-event-id="${events[index].id}">Delete</button>
+                <button onclick="archiveEvent(this)" class="btn btn--danger btn--small" data-action="archive" data-event-id="${events[index].id}">Delete</button>
             </td>
         </tr>`;
     }
@@ -283,6 +289,29 @@ function handleTableActionClick(e) {
 // document.getElementById('events-table').addEventListener('click', handleTableActionClick)
 
 function showEventDetails(eventId) {
+    ev_id = parseInt(eventId.getAttribute('data-event-id'));
+    console.log(ev_id)
+    let event;
+    for (let i = 0; i < events.length; i++) {
+        if (events[i].id === ev_id) {
+            event = events[i];
+        }
+    }
+    console.log(event);
+    const d = document.createElement('div');
+    d.innerHTML = ``
+    const modal = document.getElementById('event-modal');
+    const modalBody = document.getElementById('modal-body');
+    modalBody.innerHTML = `
+        <h2>${event.title}</h2>
+        <p>${event.description}</p>
+        <img width="500" src="${event.image}" alt="${event.title}">
+        `
+    modal.classList.remove('is-hidden');
+    console.log(modal);
+    document.querySelector('.modal__close').addEventListener("click", function(){
+        modal.classList.add('is-hidden');
+    })
     // TODO:
     // 1. Find event by id in events array
     // 2. Populate #modal-body with event details
@@ -298,6 +327,19 @@ function editEvent(eventId) {
 }
 
 function archiveEvent(eventId) {
+    ev_id = parseInt(eventId.getAttribute('data-event-id'));
+    // console.log(ev_id)
+    let event;
+    for (let i = 0; i < events.length; i++) {
+        if (events[i].id === ev_id) {
+            event = events[i];
+        }
+    }
+    // console.log(event);
+
+    archive.push(event);
+    console.log(archive);
+
     // TODO:
     // 1. Find event by id in events
     // 2. Move to archive array
