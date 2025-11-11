@@ -328,18 +328,18 @@ function editEvent(eventId) {
 
 function archiveEvent(eventId) {
     ev_id = parseInt(eventId.getAttribute('data-event-id'));
-    // console.log(ev_id)
+    console.log(ev_id)
     let event;
     for (let i = 0; i < events.length; i++) {
         if (events[i].id === ev_id) {
             event = events[i];
         }
+        
     }
     // console.log(event);
-
     archive.push(event);
-    console.log(archive);
-
+    events.splice(ev_id - 1, 1)
+    showevents();
     // TODO:
     // 1. Find event by id in events
     // 2. Move to archive array
