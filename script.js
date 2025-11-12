@@ -169,6 +169,8 @@ function addVariantRow() {
     // 2. Append to #variants-list
     // 3. Add remove listener to new row's remove button
 }
+let editingEventId;
+let f = false;
 function handleFormSubmit(e) {
     e.preventDefault();
     let tiitle = document.getElementById('event-title').value.trim();
@@ -177,6 +179,8 @@ function handleFormSubmit(e) {
     let seats = document.getElementById('event-seats').value.trim();
     let price = document.getElementById('event-price').value.trim();
 
+    let newEvent;
+    let variantrows = document.querySelectorAll('.variant-row');
     if (!t_regex.test(tiitle)) {
         alert("Please enter a title that contains only alphabetic characters");
         return;
@@ -197,25 +201,41 @@ function handleFormSubmit(e) {
         alert("Price must be a positive number");
         return;
     }
-    id++;
-    const newEvent = {
-        id: id,
-        title: tiitle,
-        image: url,
-        description: descr,
-        seats: parseInt(seats),
-        price: parseFloat(price),
-        variants: [],
-    };
-    
-    events.push(newEvent);
-    const variantrows = document.querySelectorAll('.variant-row');
+    if (f === true) {
+        for (let i = 0; i < events.length; i++) {
+            if (events[i].id === editingEventId) {
+                events[i].title = tiitle;
+                events[i].image = url;
+                events[i].description = descr;
+                events[i].seats = parseInt(seats);
+                events[i].price = parseFloat(price);
+                // events[i].variants = variants;
+                break;
+            }
+        }
+        alert('Event updated successfully!');
+        f = false;
+    }
+    else{   
+        id++;
+        newEvent = {
+            id: id,
+            title: tiitle,
+            image: url,
+            description: descr,
+            seats: parseInt(seats),
+            price: parseFloat(price),
+            variants: [],
+        };
+        events.push(newEvent);
+        alert('Event created successfully!');
+    }
     for (let index = 0; index < variantrows.length; index++) {
         newEvent.variants.push(variantrows);
     }
+    
     renderStats();
     showevents();
-    alert('Event created successfully!');
     document.getElementById('event-form').reset();
     document.getElementById('variants-list').innerHTML = '';
     // TODO:
@@ -327,6 +347,8 @@ function editEvent(eventId) {
             event = events[i];
         }
     }
+    f = true;
+    editingEventId = ev_id;
   
     document.getElementById('event-title').value = event.title;
     document.getElementById('event-image').value = event.image;
