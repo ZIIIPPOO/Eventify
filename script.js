@@ -437,11 +437,27 @@ function closeModal() {
 // SEARCH & SORT
 // ============================================
 
-function searchEvents(query) {
-    // TODO:
-    // Filter events by title (case-insensitive)
-    // Return filtered array
+function searchEvents() {
+    const input = document.getElementById('search-events');
+    
+    input.addEventListener('input', function() {
+        const search = input.value
+        const tableRows = document.querySelectorAll('#events-table .table__body tr');
+        
+        tableRows.forEach(function(row) {
+            const title = row.querySelector('td:nth-child(2)').textContent
+            
+            if (title.includes(search)) {
+                row.style.display = '';  
+            } else {
+                row.style.display = 'none';  
+            }
+        });
+    });
 }
+
+// Call it once on page load
+searchEvents();
 
 function sortEvents(eventList, sortType) {
     // TODO:
