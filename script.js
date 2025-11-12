@@ -252,7 +252,7 @@ function showevents(){
             <td><span class="badge">${events[index].variants.length}</span></td>
             <td>
                 <button onclick="showEventDetails(this)" class="btn btn--small" data-action="details" data-event-id="${events[index].id}">Details</button>
-                <button class="btn btn--small" data-action="edit" data-event-id="${events[index].id}">Edit</button>
+                <button onclick="editEvent(this)" class="btn btn--small" data-action="edit" data-event-id="${events[index].id}">Edit</button>
                 <button onclick="archiveEvent(this)" class="btn btn--danger btn--small" data-action="archive" data-event-id="${events[index].id}">Delete</button>
             </td>
         </tr>`;
@@ -318,7 +318,24 @@ function showEventDetails(eventId) {
     // 3. Remove .is-hidden from #event-modal
 }
 
+
 function editEvent(eventId) {
+    ev_id = parseInt(eventId.getAttribute('data-event-id'));
+    let event;
+    for (let i = 0; i < events.length; i++) {
+        if (events[i].id === ev_id) {
+            event = events[i];
+        }
+    }
+  
+    document.getElementById('event-title').value = event.title;
+    document.getElementById('event-image').value = event.image;
+    document.getElementById('event-description').value = event.description;
+    document.getElementById('event-seats').value = event.seats;
+    document.getElementById('event-price').value = event.price;
+    
+    const addButton = document.querySelector('[data-screen="add"]');
+    switchScreen(addButton);
     // TODO:
     // 1. Find event by id
     // 2. Populate form fields with event data
@@ -330,16 +347,20 @@ function archiveEvent(eventId) {
     ev_id = parseInt(eventId.getAttribute('data-event-id'));
     console.log(ev_id)
     let event;
+    let index;
     for (let i = 0; i < events.length; i++) {
         if (events[i].id === ev_id) {
             event = events[i];
+            index = i;
+            break;
         }
         
     }
     // console.log(event);
     archive.push(event);
-    events.splice(ev_id - 1, 1)
+    events.splice(index, 1)
     showevents();
+    console.log(archive);
     // TODO:
     // 1. Find event by id in events
     // 2. Move to archive array
