@@ -216,7 +216,7 @@ function handleFormSubmit(e) {
         alert('Event updated successfully!');
         f = false;
     }
-    else{   
+    else {
         id++;
         newEvent = {
             id: id,
@@ -233,7 +233,7 @@ function handleFormSubmit(e) {
     for (let index = 0; index < variantrows.length; index++) {
         newEvent.variants.push(variantrows);
     }
-    
+
     renderStats();
     showevents();
     document.getElementById('event-form').reset();
@@ -258,10 +258,10 @@ function removeVariantRow(button) {
 // EVENTS LIST SCREEN
 // ============================================
 
-function showevents(){
+function showevents() {
     const body = document.querySelector('.table__body');
     body.innerHTML = ''
-    
+
     for (let index = 0; index < events.length; index++) {
         body.innerHTML += `                                
         <tr class="table__row" data-event-id="${events[index].id}">
@@ -329,7 +329,7 @@ function showEventDetails(eventId) {
         `
     modal.classList.remove('is-hidden');
     console.log(modal);
-    document.querySelector('.modal__close').addEventListener("click", function(){
+    document.querySelector('.modal__close').addEventListener("click", function () {
         modal.classList.add('is-hidden');
     })
     // TODO:
@@ -349,13 +349,13 @@ function editEvent(eventId) {
     }
     f = true;
     editingEventId = ev_id;
-  
+
     document.getElementById('event-title').value = event.title;
     document.getElementById('event-image').value = event.image;
     document.getElementById('event-description').value = event.description;
     document.getElementById('event-seats').value = event.seats;
     document.getElementById('event-price').value = event.price;
-    
+
     const addButton = document.querySelector('[data-screen="add"]');
     switchScreen(addButton);
     // TODO:
@@ -376,7 +376,7 @@ function archiveEvent(eventId) {
             index = i;
             break;
         }
-        
+
     }
     // console.log(event);
     archive.push(event);
@@ -439,18 +439,18 @@ function closeModal() {
 
 function searchEvents() {
     const input = document.getElementById('search-events');
-    
-    input.addEventListener('input', function() {
+
+    input.addEventListener('input', function () {
         const search = input.value
-        const tableRows = document.querySelectorAll('#events-table .table__body tr');
-        
-        tableRows.forEach(function(row) {
+        const Rows = document.querySelectorAll('#events-table .table__body tr');
+
+        Rows.forEach(function (row) {
             const title = row.querySelector('td:nth-child(2)').textContent
-            
+
             if (title.includes(search)) {
-                row.style.display = '';  
+                row.style.display = '';
             } else {
-                row.style.display = 'none';  
+                row.style.display = 'none';
             }
         });
     });
@@ -459,12 +459,51 @@ function searchEvents() {
 // Call it once on page load
 searchEvents();
 
+function bubbleSort(arr, upOrDown, key) {
+    let symbole = upOrDown ? ">" : "<";
+    for (var i = 0; i < arr.length; i++) {
+        for (let j = 0; j < (arr.length - i - 1); j++) {
+            if (eval(`arr[j].${key} ${symbole} arr[j + 1].${key}`)) {
+                let temp = arr[j]
+                arr[j] = arr[j + 1]
+                arr[j + 1] = temp
+            }
+        }
+    }
+    showevents();
+}
+let choosen;
 function sortEvents(eventList, sortType) {
+    const sort = document.getElementById('sort-events');
+    sort.addEventListener('change', (e) => {
+        choosen = e.target.value
+        console.log(choosen);
+        switch (choosen) {
+            case 'title-asc':
+                bubbleSort(events, true, "title");
+                break;
+            case 'title-desc':
+                bubbleSort(events, false, "title");
+                break;
+            case 'price-asc':
+                bubbleSort(events, true, "price");
+                break;
+            case 'price-desc':
+                bubbleSort(events, false, "price");
+                break;
+            case 'seats-asc':
+                bubbleSort(events, true, "seats");
+                break;
+            default:
+                break;
+        }
+    })
     // TODO:
     // Sort by: title-asc, title-desc, price-asc, price-desc, seats-asc
     // Return sorted array
 }
 
+sortEvents();
 // Listen to search and sort changes
 // document.getElementById('search-events').addEventListener('input', (e) => {
 //     const filtered = searchEvents(e.target.value)
