@@ -328,7 +328,6 @@ function showEventDetails(eventId) {
         <img width="500" src="${event.image}" alt="${event.title}">
         `
     modal.classList.remove('is-hidden');
-    console.log(modal);
     document.querySelector('.modal__close').addEventListener("click", function () {
         modal.classList.add('is-hidden');
     })
@@ -382,7 +381,6 @@ function archiveEvent(eventId) {
     events.splice(index, 1)
     showevents();
     showArchive();
-    console.log(archive);
     // TODO:
     // 1. Find event by id in events
     // 2. Move to archive array
@@ -512,7 +510,6 @@ function sortEvents(eventList, sortType) {
     const sort = document.getElementById('sort-events');
     sort.addEventListener('change', (e) => {
         choosen = e.target.value
-        console.log(choosen);
         switch (choosen) {
             case 'title-asc':
                 bubbleSort(events, true, "title");
