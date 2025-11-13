@@ -376,12 +376,12 @@ function archiveEvent(eventId) {
             index = i;
             break;
         }
-
     }
     // console.log(event);
     archive.push(event);
     events.splice(index, 1)
     showevents();
+    showArchive();
     console.log(archive);
     // TODO:
     // 1. Find event by id in events
@@ -391,17 +391,52 @@ function archiveEvent(eventId) {
     // 5. Re-render table
 }
 
+function showArchive() {
+    const body = document.querySelector('#archivee');
+    body.innerHTML = '';
+
+    for (let i = 0; i < archive.length; i++) {
+        body.innerHTML += `
+        <tr class="table__row" data-event-id="${archive[i].id}">
+            <td>${archive[i].id}</td>
+            <td>${archive[i].title}</td>
+            <td>${archive[i].seats}</td>
+            <td>$${archive[i].price}</td>
+            <td>
+                <button onclick="restoreEvent(this)" class="btn btn--small" data-action="restore" data-event-id="${archive[i].id}">Restore</button>
+            </td>
+        </tr>
+        `;
+    }
+}
 // ============================================
 // ARCHIVE SCREEN
 // ============================================
 
 function renderArchiveTable(archivedList) {
+
     // TODO:
     // Similar to renderEventsTable but read-only
     // Show "Restore" button instead of "Edit"/"Delete"
 }
 
 function restoreEvent(eventId) {
+    ev_id = parseInt(eventId.getAttribute('data-event-id'));
+    // console.log(ev_id);
+    let event;
+    let index;
+    for (let i = 0; i < archive.length; i++) {
+        if (archive[i].id === ev_id) {
+            event =archive[i];
+            index = i;
+            console.log(index);
+            break;
+        }
+    }
+    events.push(event);
+    archive.splice(index, 1);
+    showArchive();
+    showevents();
     // TODO:
     // 1. Find event by id in archive
     // 2. Move back to events array
