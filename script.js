@@ -379,6 +379,7 @@ function archiveEvent(eventId) {
     // console.log(event);
     archive.push(event);
     events.splice(index, 1)
+    renderStats();
     showevents();
     showArchive();
     // TODO:
@@ -434,6 +435,7 @@ function restoreEvent(eventId) {
     events.push(event);
     archive.splice(index, 1);
     showArchive();
+    renderStats();
     showevents();
     // TODO:
     // 1. Find event by id in archive
